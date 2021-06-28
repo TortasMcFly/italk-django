@@ -1,0 +1,38 @@
+{% extends "blog/base.html" %}
+{% block content %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2 article-subtitle" href="{% url 'user-posts' object.author.username %}">{{ object.author }}</a>
+        <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
+        {% if object.author == user %}
+          <div>
+            <a class="btn btn-sm btn-update mt-1 mb-1" href="{% url 'post-update' object.id %}">Actualizar</a>
+            <a class="btn btn-sm btn-delete mt-1 mb-1" href="{% url 'post-delete' object.id %}">Eliminar</a>
+          </div>
+        {% endif %}
+      </div>
+      <h2 class="article-title">{{ object.title }}</h2>
+      <p class="article-content">{{ object.content }}</p>
+
+      <section id="comments">
+        <div class="container-comments">
+          <div class="row">
+            <div class="col-12">
+              <div class="comment">
+              </div><!--End Comment-->
+              </div><!--End col -->
+              </div><!-- End row -->
+          <div class="row">
+            <div class="col-12">
+            <textarea type="text" class="input" placeholder="Escribir comentario" "></textarea>
+              <button class='btn btn-sm btn-update float-right' type="submit">Agregar Comentario</button>
+            </div><!-- End col -->
+          </div><!--End Row -->
+        </div><!--End Container -->
+      </section><!-- end App -->
+
+    </div>
+  </article>
+{% endblock content %}
