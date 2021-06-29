@@ -293,15 +293,19 @@ a.article-title:hover {
 
 .comment {
 	display: block;
-	transition: all 1s;
+	transition: all 0.5s;
 	border-radius: 10px;
   padding: 10px;
   display: inline-block;
 	background-color: #f3f3f3;
 }
 
+.comment:hover {
+  transform: scale(1.03)
+}
+
 .hide-label {
-  margin-top: 40px;
+  margin-top: 30px;
   width: 0px;
 }
 

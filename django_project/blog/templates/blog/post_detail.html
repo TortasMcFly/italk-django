@@ -38,7 +38,8 @@
         <div class="container-comments">
           <div class="comment">
               <div>
-                <strong class="article-subtitle">{{ comment.author }} </strong>
+                <strong class="article-subtitle"> <a class="article-subtitle" href="{% url 'user-posts' object.author.username %}">{{ comment.author }}</a></strong>
+                
               </div>
               {{ comment.content|safe }}
           </div>
