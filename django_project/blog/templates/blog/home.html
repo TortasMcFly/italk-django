@@ -1,46 +1,55 @@
 {% extends "blog/base.html" %}
 {% block content %}
-    {% for post in posts %}
-        <article class="media content-section ">
-          <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2 article-subtitle" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-            </div>
-            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content }}</p>
-
-            <a class="btn button-outline-comment btn-sm mb-4" href="{% url 'post-detail' post.id %}"><img src="https://img.icons8.com/ios/50/999999/comments.png" width="24"/> Comentar</a>
-          </div>
-        </article>
-    {% endfor %}
-
-    {% if not posts %}
-    <div>
-      <img class="media animate__animated animate__bounce" src="/media/cole-no-messages.png" width="100%">
+{% for post in posts %}
+<article class="media content-section ">
+  <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+  <div class="media-body">
+    <div class="article-metadata">
+      <a class="mr-2 article-subtitle" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+      <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
     </div>
-    {% endif %}
+    <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+    <p class="article-content">{{ post.content }}</p>
 
-    {% if is_paginated %}
+    <a class="btn button-outline-comment btn-sm mb-4" href="{% url 'post-detail' post.id %}"><img
+        src="https://img.icons8.com/ios/50/999999/comments.png" width="24" /> Comentarios:</a>
 
-      {% if page_obj.has_previous %}
-        <a class="btn button-outline mb-4" href="?page=1">Primero</a>
-        <a class="btn button-outline mb-4" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
-      {% endif %}
+    {% for comentario in post.comments.all %}
+    <p>
+      <span class="font-weight-bold">{{ comentario.author }} &middot; {{ comentario.content }} &middot; {{comentario.date_posted }} </span>
+    </p>
+    {% endfor %}
+  </div>
 
-      {% for num in page_obj.paginator.page_range %}
-        {% if page_obj.number == num %}
-          <a class="btn button-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-          <a class="btn button-outline mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% endif %}
-      {% endfor %}
+</article>
 
-      {% if page_obj.has_next %}
-        <a class="btn button-outline  mb-4" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
-        <a class="btn button-outline mb-4" href="?page={{ page_obj.paginator.num_pages }}">Último</a>
-      {% endif %}
+{% endfor %}
 
-    {% endif %}
-{% endblock content %}
+{% if not posts %}
+<div>
+  <img class="media animate__animated animate__bounce" src="/media/cole-no-messages.png" width="100%">
+</div>
+{% endif %}
+
+{% if is_paginated %}
+
+{% if page_obj.has_previous %}
+<a class="btn button-outline mb-4" href="?page=1">Primero</a>
+<a class="btn button-outline mb-4" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+{% endif %}
+
+{% for num in page_obj.paginator.page_range %}
+{% if page_obj.number == num %}
+<a class="btn button-info mb-4" href="?page={{ num }}">{{ num }}</a>
+{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a class="btn button-outline mb-4"
+  href="?page={{ num }}">{{ num }}</a>
+  {% endif %}
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+  <a class="btn button-outline  mb-4" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+  <a class="btn button-outline mb-4" href="?page={{ page_obj.paginator.num_pages }}">Último</a>
+  {% endif %}
+
+  {% endif %}
+  {% endblock content %}

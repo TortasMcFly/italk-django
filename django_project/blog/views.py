@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
+from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSetFactory
 from django.views.generic import (
     ListView,
     DetailView,
@@ -8,8 +9,8 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from .models import Post
-
+from .models import Post, BlogComment
+from .forms import NewCommentForm
 
 def home(request):
     context = {
@@ -40,6 +41,24 @@ class UserPostListView(ListView):
 class PostDetailView(DetailView):
     model = Post
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        comments_connected = BlogComment.objects.filter(
+            blogpost_connected=self.get_object()).order_by('-date_posted')
+        data['comments'] = comments_connected
+        if self.request.user.is_authenticated:
+            data['comment_form'] = NewCommentForm(instance=self.request.user)
+
+        return data
+
+    def post(self, request, *args, **kwargs):
+        new_comment = BlogComment(content=request.POST.get('content'),
+                                  author=self.request.user,
+                                  blogpost_connected=self.get_object())
+        new_comment.save()
+        return self.get(self, request, *args, **kwargs)
+
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['title', 'content']
@@ -47,7 +66,6 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
