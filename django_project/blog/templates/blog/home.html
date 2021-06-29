@@ -12,13 +12,7 @@
     <p class="article-content">{{ post.content }}</p>
 
     <a class="btn button-outline-comment btn-sm mb-4" href="{% url 'post-detail' post.id %}"><img
-        src="https://img.icons8.com/ios/50/999999/comments.png" width="24" /> Comentarios:</a>
-
-    {% for comentario in post.comments.all %}
-    <p>
-      <span class="font-weight-bold">{{ comentario.author }} &middot; {{ comentario.content }} &middot; {{comentario.date_posted }} </span>
-    </p>
-    {% endfor %}
+        src="https://img.icons8.com/ios/50/999999/comments.png" width="24" /> Comentar</a>
   </div>
 
 </article>
