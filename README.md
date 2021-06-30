@@ -1,10 +1,10 @@
 # italk-django
 
 
-Started:
+## Started:
 
-pipenv install -r requirements.txt
+- pipenv install -r requirements.txt
 
-pipenv install pillow
-pip install django-extra-views
-pip install --upgrade sweetify
+- pipenv install pillow
+- pip install django-extra-views
+- pip install --upgrade sweetify
